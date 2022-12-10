@@ -1,6 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+import morgan from "morgan";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 
 // Route Imports
 
@@ -14,11 +17,14 @@ app.use(express.json());
 
 
 //Routes Middleware
-app.use('/users', userRoutes);
+app.use('/api', userRoutes);
 
 
 
-
+//Middlewares
+app.use(morgan('dev'))
+app.use(bodyParser.json())
+app.use(cookieParser());
 
 
 
