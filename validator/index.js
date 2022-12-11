@@ -24,17 +24,11 @@ export const userSignupValidator = async (req, res, next) => {
 
   const result = validationResult(req);
   if (!result.isEmpty()) {
-    return res.status(400).json({ errors: result.array() });
+    const firstError = result['errors'].map(error => error.msg)
+    return res.status(400).json({ errors:  firstError });
   }
 
   next();
 };
 
-// export const checkingValidation = (req, res, next) => {
-//   const errors = validationResult(req);
-//   console.log(req.body);
-//   if (!errors.isEmpty()) {
-//     return res.status(422).jsonp(errors.array());
-//   }
-//   next();
-// };
+
