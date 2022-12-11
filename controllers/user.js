@@ -35,12 +35,11 @@ export const signin = async (req, res) => {
       }
       //Authenticate user if user is found
 
-      if(!user.authenticate(password)){
+      if (!user.authenticate(password)) {
         return res.status(401).json({
-          error: 'Email and password dont match'
-        })
+          error: "Email and password dont match",
+        });
       }
-
 
       const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
 
@@ -58,6 +57,17 @@ export const signin = async (req, res) => {
         },
       });
     });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
+export const signout = async (req, res) => {
+  try {
+    res.clearCookie("t");
+    res.json({
+      message: "Signout success"
+    })
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
