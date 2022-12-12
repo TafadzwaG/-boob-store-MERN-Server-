@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 
 // Route Imports
 
+import authRoutes from './routes/auth.js'
 import userRoutes from './routes/user.js'
 
 
@@ -18,6 +19,7 @@ app.use(express.json());
 
 
 //Routes Middleware
+app.use('/api', authRoutes);
 app.use('/api', userRoutes);
 
 

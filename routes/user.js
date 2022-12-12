@@ -1,12 +1,21 @@
 import express from "express";
-import { signup , signin, signout } from "../controllers/user.js";
-import { userSignupValidator } from "../validator/index.js";
-import { check, validationResult } from "express-validator";
+import { userById } from "../controllers/user.js";
+import { verifyToken, isAuth, requireSignin } from "../middleware/auth.js";
+import { isAdmin } from "../middleware/admin.js";
 
 const router = express.Router();
 
-router.post("/signup", userSignupValidator, signup);
-router.post("/signin", signin);
-router.get("/signout", signout)
+router.param("userId", userById);
+router.get(
+  "/secret/:userId",
+  requireSignin,
+  isAuth,
+  isAdmin,
+  (req, res) => {
+    res.json({
+      user: req.profile,
+    });
+  }
+);
 
 export default router;
