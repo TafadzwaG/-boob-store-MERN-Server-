@@ -10,6 +10,8 @@ import cookieParser from "cookie-parser";
 
 import authRoutes from './routes/auth.js'
 import userRoutes from './routes/user.js'
+import categoryRoutes from './routes/category.js'
+import productRoutes from './routes/product.js'
 
 
 dotenv.config();
@@ -21,6 +23,8 @@ app.use(express.json());
 //Routes Middleware
 app.use('/api', authRoutes);
 app.use('/api', userRoutes);
+app.use('/api', categoryRoutes);
+app.use('/api', productRoutes);
 
 
 
