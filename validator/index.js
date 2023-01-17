@@ -32,3 +32,8 @@ export const userSignupValidator = async (req, res, next) => {
 };
 
 
+
+export const contactValidator = async (req, res, next) => {}
+
+export const commentValidator = async (req, res, next) => {}
+

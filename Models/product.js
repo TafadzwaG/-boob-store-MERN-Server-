@@ -1,4 +1,4 @@
-import { ObjectId } from "mongodb";
+const ObjectId = mongoose.Schema.Types.ObjectId
 import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema(
@@ -21,24 +21,21 @@ const productSchema = new mongoose.Schema(
       required: true,
       maxlength: 32,
     },
-
     category: {
       type: ObjectId,
       ref: "Category",
       required: true,
     },
-
     quantity: {
       type: Number,
     },
-
-    image: {
-      data: Buffer,
-      contentType: String,
+    sold: {
+      type: Number,
+      default: 0,
     },
-
+    imagePath: String,
     shipping: {
-      require: false,
+      required: false,
       type: Boolean,
     },
   },

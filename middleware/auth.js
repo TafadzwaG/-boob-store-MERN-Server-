@@ -34,7 +34,7 @@ export const isAuth = (req, res, next) => {
 
   if(!user){
     return res.status(403).json({
-      error: "Access Denied!"
+      error: "Access Denied! User not found"
     })
   }
   next()

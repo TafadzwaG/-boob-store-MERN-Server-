@@ -11,7 +11,14 @@ const categorySchema = new mongoose.Schema(
       unique: true,
       maxlength: 32,
     },
+    description: {
+      type: String,
+      required: true,
+      maxlength: 2000,
+    },
+    imagePath: String,
   },
+
   {
     timestamps: true,
   }

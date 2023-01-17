@@ -18,7 +18,7 @@ export const categoryById = async (req, res, next) => {
   }
 };
 
-export const create = async (req, res) => {
+export const createCategory = async (req, res) => {
   try {
     const category = new Category(req.body);
     category.save((err, data) => {
@@ -46,17 +46,19 @@ export const read = async (req, res) => {
 
 export const list = async (req, res) => {
   try {
-
     Category.find().exec((err, data) => {
-      if(err){
+      if (err) {
         return res.status(400).json({
-          error: errorHandler(err) || 'Error finding categories'
-        })
+          error: errorHandler(err) || "Error finding categories",
+        });
       }
-    })
-  } catch (error) { 
+
+      res.json({ data });
+    });
+  } catch (error) {
     res.status(404).json({ message: error.message });
   }
+
 };
 
 export const update = async (req, res) => {
@@ -77,7 +79,6 @@ export const update = async (req, res) => {
     res.status(404).json({ message: error.message });
   }
 };
-
 
 export const deleteCategory = async (req, res) => {
   try {
