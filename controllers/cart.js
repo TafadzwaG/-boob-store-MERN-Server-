@@ -50,7 +50,7 @@ export const createCart = async (req, res) => {
         await cart.save();
         res.status(200).send(cart);
       } else {
-        cart.products.push({ productId, name, quantity, price, imagePath });
+        cart.products.push({ productId, name, quantity, price, imagePath, totalPrice : quantity * price });
         cart.bill = cart.products.reduce((acc, curr) => {
           return acc + curr.quantity * curr.price;
         }, 0);
@@ -62,7 +62,7 @@ export const createCart = async (req, res) => {
 
       const newCart = await Cart.create({
         cartOwner,
-        products: [{ productId, name, quantity, price, imagePath }],
+        products: [{ productId, name, quantity, price, imagePath , totalPrice : quantity * price}],
         bill: quantity * price,
       });
 

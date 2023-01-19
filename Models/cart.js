@@ -23,6 +23,7 @@ const cartSchema = new mongoose.Schema(
           default: 1,
         },
         price: Number,
+        totalPrice: Number,
         imagePath: String
       },
     ],
