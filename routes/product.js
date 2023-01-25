@@ -10,7 +10,8 @@ import {
   listCategories,
   listBySearch,
   productImage,
-  getProducts
+  getProducts,
+  listSearch
 } from "../controllers/product.js";
 import { verifyToken, isAuth, requireSignin } from "../middleware/auth.js";
 import { isAdmin } from "../middleware/admin.js";
@@ -37,6 +38,7 @@ router.put(
   update
 );
 router.get("/products", list);
+router.post("/products/search", listSearch)
 router.get("/all-products", getProducts);
 router.get("/products/related/:productId", listRelated);
 router.get("/products/categories", listCategories)

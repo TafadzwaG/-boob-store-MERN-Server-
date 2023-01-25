@@ -79,8 +79,15 @@ export const productById = async (req, res, next, id) => {
 
 export const create = async (req, res) => {
   try {
-    const { name, price, description, category, quantity, imagePath, shipping } =
-      req.body;
+    const {
+      name,
+      price,
+      description,
+      category,
+      quantity,
+      imagePath,
+      shipping,
+    } = req.body;
 
     const newProduct = new Product({
       name,
@@ -258,7 +265,7 @@ export const listCategories = async (req, res, next) => {
 export const listBySearch = async (req, res, next) => {
   let order = req.query.order ? req.query.order : "asc";
   let sortBy = req.query.sortBy ? req.query.sortBy : "_id";
-  let limit = req.query.limit ? parseInt(req.query.limit) : 100;
+  let limit = req.query.limit ? parseInt(req.query.limit) : 12;
   let skip = parseInt(req.body.skip);
   let findArgs = {};
 
@@ -305,8 +312,6 @@ export const productImage = async (req, res, next) => {
   next();
 };
 
-
-
 export const getProducts = async (req, res) => {
   try {
     Product.find().exec((err, data) => {
@@ -321,5 +326,28 @@ export const getProducts = async (req, res) => {
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
+};
 
+export const listSearch = async (req, res) => {
+  try {
+    const query = {};
+
+    if (req.query.search) {
+      query.name = { $regex: req.query.search, $options: "i" };
+      if (req.query.category && req.query.category != "All") {
+        query.category = req.query.category;
+      }
+    }
+
+    Product.find(query, (err, products) => {
+      if (err) {
+        return res.status(400).json({
+          error: errorHandler(err) || "Error finding Products",
+        });
+      }
+      res.json({ products });
+    });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };
