@@ -38,6 +38,14 @@ const productSchema = new mongoose.Schema(
       required: false,
       type: Boolean,
     },
+    comments: {
+      type: Array,
+      default: [],
+    },
+    rating: {
+      type: Number,
+      default: 0
+    }
   },
   {
     timestamps: true,

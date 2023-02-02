@@ -1,7 +1,7 @@
 import Category from "../Models/category.js";
 import { errorHandler } from "../helpers/dbErrorHandler.js";
 
-export const categoryById = async (req, res, next) => {
+export const categoryById = async (req, res, next, id) => {
   try {
     Category.findById(id).exec((err, category) => {
       if (err || !category) {
@@ -58,22 +58,29 @@ export const list = async (req, res) => {
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
-
 };
 
 export const update = async (req, res) => {
   try {
-    const category = req.category;
-    category.name = req.body.name;
+    let category = req.category;
+    const { name, description, imagePath } = req.body;
+
+    name ? (category.name = name) : (category.name = category.name);
+    description
+      ? (category.description = description)
+      : (category.description = category.description);
+    imagePath !== "undefined"
+      ? (category.imagePath = imagePath)
+      : (category.imagePath = category.imagePath);
 
     category.save((err, data) => {
       if (err) {
         return res.status(400).json({
-          error: errorHandler(err) || "Error whilst updating!",
+          error: errorHandler(err) || err,
         });
       }
 
-      res.json(data);
+      res.status(201).json(data);
     });
   } catch (error) {
     res.status(404).json({ message: error.message });

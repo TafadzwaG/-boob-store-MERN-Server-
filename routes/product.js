@@ -4,7 +4,7 @@ import {
   read,
   productById,
   remove,
-  update,
+  
   list,
   listRelated,
   listCategories,
@@ -30,13 +30,13 @@ router.delete(
   isAdmin,
   remove
 );
-router.put(
-  "/product/:productId/:userId",
-  requireSignin,
-  isAuth,
-  isAdmin,
-  update
-);
+// router.put(
+//   "/product/:productId/:userId",
+//   requireSignin,
+//   isAuth,
+//   isAdmin,
+//   update
+// );
 router.get("/products", list);
 router.post("/products/search", listSearch)
 router.get("/all-products", getProducts);

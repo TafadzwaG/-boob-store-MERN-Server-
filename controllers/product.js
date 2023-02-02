@@ -108,6 +108,52 @@ export const create = async (req, res) => {
   }
 };
 
+export const updateProduct = async (req, res) => {
+  try {
+    let product = req.product;
+    const {
+      name,
+      price,
+      description,
+      category,
+      quantity,
+      imagePath,
+      shipping,
+      sold,
+    } = req.body;
+
+    name ? (product.name = name) : (product.name = product.name);
+    description
+      ? (product.description = description)
+      : (product.description = product.description);
+    price ? (product.price = price) : (product.price = product.price);
+    category
+      ? (product.category = category)
+      : (product.category = product.category);
+    quantity
+      ? (product.quantity = quantity)
+      : (product.quantity = product.quantity);
+    sold ? (product.sold = sold) : (product.sold = product.sold);
+    shipping
+      ? (product.shipping = shipping)
+      : (product.shipping = product.shipping);
+    imagePath !== "undefined"
+      ? (product.imagePath = imagePath)
+      : (product.imagePath = product.imagePath);
+
+    product.save((err, data) => {
+      if (err) {
+        return res.status(400).json({
+          error: errorHandler(err) || err,
+        });
+      }
+      res.status(201).json(data);
+    });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
 export const read = async (req, res, next) => {
   try {
     req.product.image = undefined;
@@ -129,64 +175,6 @@ export const remove = async (req, res, next) => {
 
       res.json({
         message: "Product deletion was successful",
-      });
-    });
-  } catch (error) {
-    res.status(404).json({ message: error.message });
-  }
-};
-
-export const update = async (req, res) => {
-  try {
-    let form = new formidable.IncomingForm();
-
-    form.keepExtensions = true;
-
-    form.parse(req, (err, fields, files) => {
-      if (err) {
-        return res.status(400).json({
-          error: "Image could not be uploaded",
-        });
-      }
-
-      // check for all fields
-      const { name, description, price, category, quantity, shipping } = fields;
-      if (
-        !name ||
-        !description ||
-        !price ||
-        !category ||
-        !quantity ||
-        !shipping
-      ) {
-        return res.status(400).json({
-          error: "All fields are required",
-        });
-      }
-
-      let product = req.product;
-
-      product = _.extend(product, fields);
-
-      if (files.image) {
-        if (files.image.size > 1000000) {
-          return res.status(400).json({
-            error: "Image should be less than 1MB is size",
-          });
-        }
-
-        product.image.data = fs.readFileSync(files.image.path);
-        product.image.contentType = files.image.type;
-      }
-
-      product.save((err, result) => {
-        if (err) {
-          return res.status(400).json({
-            error: "There was an error",
-          });
-        }
-
-        res.json(result);
       });
     });
   } catch (error) {
