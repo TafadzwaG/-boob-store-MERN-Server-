@@ -50,7 +50,14 @@ export const createCart = async (req, res) => {
         await cart.save();
         res.status(200).send(cart);
       } else {
-        cart.products.push({ productId, name, quantity, price, imagePath, totalPrice : quantity * price });
+        cart.products.push({
+          productId,
+          name,
+          quantity,
+          price,
+          imagePath,
+          totalPrice: quantity * price,
+        });
         cart.bill = cart.products.reduce((acc, curr) => {
           return acc + curr.quantity * curr.price;
         }, 0);
@@ -62,7 +69,16 @@ export const createCart = async (req, res) => {
 
       const newCart = await Cart.create({
         cartOwner,
-        products: [{ productId, name, quantity, price, imagePath , totalPrice : quantity * price}],
+        products: [
+          {
+            productId,
+            name,
+            quantity,
+            price,
+            imagePath,
+            totalPrice: quantity * price,
+          },
+        ],
         bill: quantity * price,
       });
 
@@ -74,10 +90,10 @@ export const createCart = async (req, res) => {
 };
 
 export const deleteCartItem = async (req, res) => {
-  const cartOwner = req.params.userId;
-  const productId = req.query.productId;
-
   try {
+    const cartOwner = req.params.userId;
+    const productId = req.query.productId;
+
     let cart = await Cart.findOne({ cartOwner });
     const productIndex = cart.products.findIndex(
       (product) => product.productId == productId
@@ -85,12 +101,15 @@ export const deleteCartItem = async (req, res) => {
 
     if (productIndex > -1) {
       let product = cart.products[productIndex];
+      product.quantity--;
+      if (product.quantity <= 0) {
+        cart.products.splice(productIndex, 1);
+      }
       cart.bill -= product.quantity * product.price;
       if (cart.bill < 0) {
         cart.bill = 0;
       }
 
-      cart.products.splice(productIndex, 1);
       cart.bill = cart.products.reduce((acc, curr) => {
         return acc + curr.quantity * curr.price;
       }, 0);

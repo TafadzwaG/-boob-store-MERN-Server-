@@ -13,6 +13,6 @@ router.param("productId", productById);
 
 router.get("/cart/:userId", requireSignin, isAuth, getUserCart);
 router.post("/cart/:userId", requireSignin, isAuth,  createCart);
-router.delete("/cart/userId", requireSignin, isAuth, deleteCartItem);
+router.delete("/cart/delete/:userId", requireSignin, isAuth, deleteCartItem);
 
 export default router;

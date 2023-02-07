@@ -31,6 +31,8 @@ export const createComment = async (req, res) => {
       user,
     });
 
+    await newComment.save();
+
 
     const product = await Product.findById(productId);
     product.comments.push(newComment);
@@ -53,8 +55,7 @@ export const createComment = async (req, res) => {
       { new: true }
     );
 
-    await newComment.save();
-
+  
     const newComments = await Comment.find().sort({ createdAt: -1 }).limit(4);
     res.status(201).json(newComments);
    

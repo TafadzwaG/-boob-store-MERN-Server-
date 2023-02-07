@@ -68,7 +68,6 @@ export const removeProductFromWishlist = async (req, res) => {
 
     if (productIndex > -1) {
       const splicedArr = wishlist.items.splice(productIndex, 1);
-      console.log("SpLI", splicedArr);
       await wishlist.save();
 
       res.status(200).send(wishlist);
