@@ -123,3 +123,32 @@ export const deleteCartItem = async (req, res) => {
     res.status(404).json({ message: error.message });
   }
 };
+
+export const removeItemFromCart = async (req, res) => {
+  try {
+    const cartOwner = req.params.userId;
+    const productId = req.query.productId;
+
+    let cart = await Cart.findOne({ cartOwner });
+    const productIndex = cart.products.findIndex(
+      (product) => product.productId == productId
+    );
+    if (productIndex > -1) {
+      cart.products.splice(productIndex, 1);
+      if (cart.bill < 0) {
+        cart.bill = 0;
+      }
+
+      cart.bill = cart.products.reduce((acc, curr) => {
+        return acc + curr.quantity * curr.price;
+      }, 0);
+
+      await cart.save();
+      res.status(200).send(cart);
+    } else {
+      res.status(404).send("Item not found");
+    }
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
